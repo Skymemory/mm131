@@ -20,10 +20,11 @@ async def fetch_and_save(session, url, headers, path):
         out.write(content)
 
 
-async def crawler(session, base_url, category, index, save_dir):
+async def crawler(session, category, index, save_dir):
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
+    base_url = 'http://www.mm131.com/{}/{}.html'.format(category, index)
     success, fail = 0, 0
     resp = await session.get(base_url, allow_redirects=False)
     # ignore unexpected error
@@ -70,19 +71,18 @@ async def download(category, start, end, save_dir):
             if not chunk:
                 break
 
-            urls = []
+            contexts = []
             tasks = []
             for elem in chunk:
-                base_url = 'http://www.mm131.com/{}/{}.html'.format(category, elem)
                 folder = os.path.join(save_dir, str(elem))
 
-                urls.append(base_url)
-                tasks.append(crawler(session, base_url, category, elem, folder))
+                contexts.append(elem)
+                tasks.append(crawler(session, category, elem, folder))
 
             rs = await asyncio.gather(*tasks, return_exceptions=True)
-            for base_url, result in zip(urls, rs):
+            for index, result in zip(contexts, rs):
                 if isinstance(result, Exception):
-                    logging.error('{} got unexpected error {}'.format(base_url, result))
+                    logging.error('{}/{} got unexpected error {}'.format(category, index, result))
                 else:
                     s, f = result
                     success += s
