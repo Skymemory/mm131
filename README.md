@@ -17,29 +17,34 @@ mm131网站上的一张图片由一个二元组标识（一级索引，二级索
 mm131.py提供了几个选项说明，通过`python test.py -h`可参看:
 
 ```shell
-usage: mm131.py [-h] [-c CATEGORY] [-r RANGE] [-d DIRECTORY] [--level LEVEL]
+usage: tasks.py [-h] [-c {xinggan,qingchun,xiaohua,chemo,qipao,mingxing}] [-v]
+                [-d DIRECTORY]
+                s[,e]
 
-Picture downloader for mm131
+A picture downloader from mm131.
+
+positional arguments:
+  s[,e]                 range
 
 optional arguments:
-  -h, --help     show this help message and exit
-  -c CATEGORY    Specify which category to download(default xinggan)
-  -r RANGE       Specify first index,format: start[,end]
-  -d DIRECTORY   Save directory(default /tmp)
-  --level LEVEL  Logging level
+  -h, --help            show this help message and exit
+  -c {xinggan,qingchun,xiaohua,chemo,qipao,mingxing}, --category {xinggan,qingchun,xiaohua,chemo,qipao,mingxing}
+                        specify category(default xinggan)
+  -v, --verbose         show verbose information
+  -d DIRECTORY, --directory DIRECTORY
+                        download directory
 ```
 
 
 
 - `-c`：指定下载图片的分类，默认xinggan
-- `-r`：指定一级索引范围
 - `-d`：指定保存目录，默认/tmp目录
-- `—level`：日志打印级别
+- `-v`：运行详细信息
 
 比如下载一级索引为4100图片:
 
 ```shell
-> python mm131.py -r 4100
+> python mm131.py 4100
 INFO:root:-----------------statistics------------------
 INFO:root:Success:65		Fail:0
 INFO:root:Cost time:1.678253173828125
